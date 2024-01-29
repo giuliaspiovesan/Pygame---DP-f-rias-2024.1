@@ -1,4 +1,5 @@
 import pygame
+import random
 from config import FPS, WIDTH, HEIGHT, BLACK
 from assets import carrega_arquivos
 
@@ -13,7 +14,9 @@ def game_screen(window):
     state = PLAYING
 
     img_input = dicionario_de_arquivos['img_input'] #imagem do input
-    
+    x_input = random.randint(0, 900)
+    y_input = -1
+    vel_y = 1
     # ===== Loop principal =====
     while state != DONE:
         clock.tick(FPS)
@@ -23,10 +26,11 @@ def game_screen(window):
             # ----- Verifica consequências
             if event.type == pygame.QUIT:
                 state = DONE
-
+        if y_input < HEIGHT:
+            y_input += vel_y
         # ----- Gera saídas
         window.fill(BLACK)  # Preenche com a cor branca
-        window.blit(img_input, (600, 600)) #desenha imagem input na tela 
+        window.blit(img_input, (x_input, y_input)) #desenha imagem input na tela 
         pygame.display.update()  # Mostra o novo frame para o jogador
 
     return state
