@@ -21,6 +21,8 @@ def game_screen(window):
 
     pontos = 0
     vidas = 3
+    i = 3 # contar o tamanho das palavras
+    conta_jogadas = 1
 
     texto_digitado = ''
 
@@ -38,7 +40,7 @@ def game_screen(window):
         return sorteada
     
     
-    palavra = sorteia_palavra(3)
+    palavra = sorteia_palavra(i)
     # ===== Loop principal =====
     while state != DONE:
         clock.tick(FPS)
@@ -64,7 +66,9 @@ def game_screen(window):
                 som_sucesso.play()
                 texto_digitado = ''
                 y_input = -100
-                palavra = sorteia_palavra(3)
+                x_input = random.randint(0, WIDTH-img_input.get_width())
+                conta_jogadas += 1
+                palavra = sorteia_palavra(i)
 
             else:
                 vidas -= 1
@@ -73,27 +77,39 @@ def game_screen(window):
                 if vidas > 0:
                     texto_digitado = ''
                     y_input = -100
-                    palavra = sorteia_palavra(3)
-        
+                    x_input = random.randint(0, WIDTH-img_input.get_width())
+                    conta_jogadas += 1
+                    palavra = sorteia_palavra(i)
+            
+        if conta_jogadas == 5:
+            conta_jogadas = 0
+            i += 1
+                
         if vidas == 0:
             state = DONE
+            pnt = font.render(f'Pontuação final: {pontos}', True, (255, 255, 255))
+            game_over = font.render('GAME OVER!!', True, (255, 0, 0))
+            window.fill(BLACK)
+            window.blit(game_over, (WIDTH / 2 - game_over.get_width() / 2, HEIGHT / 2 - game_over.get_height() / 2))
+            window.blit(pnt, (WIDTH / 2 - pnt.get_width() / 2, HEIGHT / 2 + 50))
+            
 
         # ----- Gera saídas
-        window.fill(BLACK)  # Preenche com a cor branca
-        window.blit(img_input, (x_input, y_input)) #desenha imagem input na tela
-        texto = font.render(palavra, True, (255,255,255))
+        window.fill(BLACK)  # Preenche com a cor preta
+        window.blit(img_input, (x_input, y_input))  # Desenha imagem input na tela
+        texto = font.render(palavra, True, (255, 255, 255))
         xpal = x_input + (img_input.get_width() - texto.get_width()) / 2
         window.blit(texto, (xpal, y_input))
 
-        digitado = font.render(texto_digitado, True, (0,0,0))
-        ydig = y_input + (img_input.get_height() / 2) + (img_input.get_height()/4) - digitado.get_height()/2
-        window.blit(digitado, (x_input, ydig)) 
+        digitado = font.render(texto_digitado, True, (0, 0, 0))
+        ydig = y_input + (img_input.get_height() / 2) + (img_input.get_height() / 4) - digitado.get_height() / 2
+        window.blit(digitado, (xpal, ydig))
 
-        txt_vidas = font.render(f'Vidas: {vidas}', True, (255,255,255))
-        window.blit(txt_vidas, (30,50))
+        txt_vidas = font.render(f'Vidas: {vidas}', True, (255, 255, 255))
+        window.blit(txt_vidas, (30, 50))
 
-        txt_pontos = font.render(f'Pontos: {pontos}', True, (255,255,255))
-        window.blit(txt_pontos, (30,80))      
+        txt_pontos = font.render(f'Pontos: {pontos}', True, (255, 255, 255))
+        window.blit(txt_pontos, (30, 80))
         pygame.display.update()  # Mostra o novo frame para o jogador
 
     return state
