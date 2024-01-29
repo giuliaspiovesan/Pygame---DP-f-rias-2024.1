@@ -15,11 +15,20 @@ def game_screen(window):
     state = PLAYING
 
     img_input = dicionario_de_arquivos['img_input'] #imagem do input
-    x_input = random.randint(0, WIDTH)
-    y_input = -1
+    x_input = random.randint(0, WIDTH-img_input.get_width())
+    y_input = -100
     vel_y = 1
 
+    pontos = 0
+    vidas = 3
+
+    texto_digitado = ''
+
     font = dicionario_de_arquivos['font']
+
+    som_sucesso = pygame.mixer.Sound('grupo03/assets/snd/success.wav')
+    som_wah = pygame.mixer.Sound('grupo03/assets/snd/wah-wah.wav')
+
     def sorteia_palavra(tam):
         selecionadas = []
         for pal in lista_palavras:
@@ -27,6 +36,7 @@ def game_screen(window):
                 selecionadas.append(pal)
         sorteada = random.choice(selecionadas)
         return sorteada
+    
     
     palavra = sorteia_palavra(3)
     # ===== Loop principal =====
@@ -38,15 +48,52 @@ def game_screen(window):
             # ----- Verifica consequências
             if event.type == pygame.QUIT:
                 state = DONE
+            elif event.type == pygame.KEYDOWN:
+                letra = event.unicode
+                if letra.isalpha():
+                    texto_digitado += letra
+
+
+
         if y_input < HEIGHT:
             y_input += vel_y
+
+        elif y_input >= HEIGHT:
+            if texto_digitado == palavra:
+                pontos += 1
+                som_sucesso.play()
+                texto_digitado = ''
+                y_input = -100
+                palavra = sorteia_palavra(3)
+
+            else:
+                vidas -= 1
+                vel_y += 1
+                som_wah.play()
+                if vidas > 0:
+                    texto_digitado = ''
+                    y_input = -100
+                    palavra = sorteia_palavra(3)
+        
+        if vidas == 0:
+            state = DONE
+
         # ----- Gera saídas
         window.fill(BLACK)  # Preenche com a cor branca
         window.blit(img_input, (x_input, y_input)) #desenha imagem input na tela
         texto = font.render(palavra, True, (255,255,255))
         xpal = x_input + (img_input.get_width() - texto.get_width()) / 2
-        window.blit(texto, (xpal, y_input)) 
-        
+        window.blit(texto, (xpal, y_input))
+
+        digitado = font.render(texto_digitado, True, (0,0,0))
+        ydig = y_input + (img_input.get_height() / 2) + (img_input.get_height()/4) - digitado.get_height()/2
+        window.blit(digitado, (x_input, ydig)) 
+
+        txt_vidas = font.render(f'Vidas: {vidas}', True, (255,255,255))
+        window.blit(txt_vidas, (30,50))
+
+        txt_pontos = font.render(f'Pontos: {pontos}', True, (255,255,255))
+        window.blit(txt_pontos, (30,80))      
         pygame.display.update()  # Mostra o novo frame para o jogador
 
     return state
