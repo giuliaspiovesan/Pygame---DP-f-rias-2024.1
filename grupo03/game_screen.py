@@ -2,6 +2,7 @@ import pygame
 import random
 from config import FPS, WIDTH, HEIGHT, BLACK
 from assets import carrega_arquivos
+from banco_palavras import lista_palavras
 
 def game_screen(window):
     # Variável para o ajuste de velocidade
@@ -14,9 +15,17 @@ def game_screen(window):
     state = PLAYING
 
     img_input = dicionario_de_arquivos['img_input'] #imagem do input
-    x_input = random.randint(0, 900)
+    x_input = random.randint(0, WIDTH)
     y_input = -1
     vel_y = 1
+    def sorteia_palavra(tam):
+        selecionadas = []
+        for pal in lista_palavras:
+            if len(pal) == tam:
+                selecionadas.append(pal)
+        sorteada = random.choice(selecionadas)
+        return sorteada
+    
     # ===== Loop principal =====
     while state != DONE:
         clock.tick(FPS)
