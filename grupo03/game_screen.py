@@ -12,6 +12,8 @@ def game_screen(window):
     PLAYING = 1
     state = PLAYING
 
+    img_input = dicionario_de_arquivos['img_input'] #imagem do input
+    
     # ===== Loop principal =====
     while state != DONE:
         clock.tick(FPS)
@@ -24,7 +26,7 @@ def game_screen(window):
 
         # ----- Gera saídas
         window.fill(BLACK)  # Preenche com a cor branca
-
+        window.blit(img_input, (600, 600)) #desenha imagem input na tela 
         pygame.display.update()  # Mostra o novo frame para o jogador
 
     return state
