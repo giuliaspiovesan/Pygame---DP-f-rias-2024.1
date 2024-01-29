@@ -11,7 +11,7 @@ pygame.mixer.init()
 
 # ----- Gera tela principal
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Nome do seu jogo')
+pygame.display.set_caption('Pega palavras!')
 
 state = INIT
 while state != QUIT:

@@ -84,16 +84,16 @@ def game_screen(window):
         if conta_jogadas == 5:
             conta_jogadas = 0
             i += 1
-                
+
         if vidas == 0:
             state = DONE
             pnt = font.render(f'Pontuação final: {pontos}', True, (255, 255, 255))
             game_over = font.render('GAME OVER!!', True, (255, 0, 0))
             window.fill(BLACK)
-            window.blit(game_over, (WIDTH / 2 - game_over.get_width() / 2, HEIGHT / 2 - game_over.get_height() / 2))
-            window.blit(pnt, (WIDTH / 2 - pnt.get_width() / 2, HEIGHT / 2 + 50))
-            
+            window.blit(game_over, (450,350))
+            window.blit(pnt, (450, 500))
 
+            
         # ----- Gera saídas
         window.fill(BLACK)  # Preenche com a cor preta
         window.blit(img_input, (x_input, y_input))  # Desenha imagem input na tela
