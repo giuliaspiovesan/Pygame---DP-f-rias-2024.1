@@ -86,12 +86,7 @@ def game_screen(window):
             i += 1
 
         if vidas == 0:
-            state = DONE
-            pnt = font.render(f'Pontuação final: {pontos}', True, (255, 255, 255))
-            game_over = font.render('GAME OVER!!', True, (255, 0, 0))
-            window.fill(BLACK)
-            window.blit(game_over, (450,350))
-            window.blit(pnt, (450, 500))
+            return 'game over', pontos
 
             
         # ----- Gera saídas
