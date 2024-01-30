@@ -3,14 +3,13 @@ import random
 from config import FPS, WIDTH, HEIGHT, BLACK
 from assets import carrega_arquivos
 
-def game_over(window, pontos):
+def game_over(window, pontos, ranking):
     # Variável para o ajuste de velocidade
     clock = pygame.time.Clock()
 
     dicionario_de_arquivos = carrega_arquivos()
-    font_titulo = dicionario_de_arquivos['font']
-    font_grande = pygame.font.Font(None, 50)  # Tamanho grande
-    font_pequena = pygame.font.Font(None, 30)  # Tamanho pequeno
+    font_resto = dicionario_de_arquivos['font']
+    font = dicionario_de_arquivos['font_media']
 
     DONE = 0
     PLAYING = 1
@@ -28,16 +27,16 @@ def game_over(window, pontos):
         
         # ----- Gera saídas
         window.fill((0, 0, 0))  # Preenche com a cor preta
-        txt_game = font_titulo.render('GAME OVER!!', True, (255, 0, 0))
-        txt_pnt = font_pequena.render(f'Sua pontuação final foi de {pontos} ponto(s)', True, (255, 255, 255))
+        txt_game = font.render('GAME OVER!!', True, (255, 0, 0))
+        txt_pnt = font_resto.render(f'Pontuação: {pontos}', True, (255, 255, 255))
+        txt_top10 = font_resto.render('Top 10 pontos: ', True, (255,255,255))
+        window.blit(txt_game, (100,50))
+        window.blit(txt_pnt, (550,50))
+        window.blit(txt_top10, (300, 150))
 
-        # Define as posições dos textos
-        pos_txt_game = (250, 200)
-        pos_txt_pnt = (100, 400)
-
-        # Renderiza os textos nas posições definidas
-        window.blit(txt_game, pos_txt_game)
-        window.blit(txt_pnt, pos_txt_pnt)
+        for i in range(len(ranking[:10])):
+            txt_rank = font_resto.render(f'{ranking[i]}', True, (255,255,255))
+            window.blit(txt_rank, (450,200+i*50))
 
         pygame.display.update()  # Mostra o novo frame para o jogador
 

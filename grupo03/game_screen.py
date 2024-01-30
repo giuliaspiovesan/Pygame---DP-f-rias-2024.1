@@ -81,12 +81,20 @@ def game_screen(window):
                     conta_jogadas += 1
                     palavra = sorteia_palavra(i)
             
-        if conta_jogadas == 5:
+        if conta_jogadas == 3:
             conta_jogadas = 0
             i += 1
 
         if vidas == 0:
-            return 'game over', pontos
+            with open('ranking.txt', 'a') as file:
+                file.write(f'{pontos}\n')
+            pontuacoes = []
+            with open('ranking.txt', 'r') as file:
+                for line in file:
+                    pontuacao = int(line.strip())
+                    pontuacoes.append(pontuacao)
+            pontuacoes.sort(reverse=True)
+            return 'game over', pontos, pontuacoes[:10]
 
             
         # ----- Gera saídas
